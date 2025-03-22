@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>燧皇 - 部落冲突账号</title>
+  <style>
+    :root {
+      --primary-color: #f1c40f;
+      --secondary-color: #2c3e50;
+      --accent-color: #4ca1af;
+      --bg-gradient: linear-gradient(135deg, #2c3e50, #4ca1af);
+      --card-bg: rgba(255,255,255,0.15);
+      --card-border: rgba(255,255,255,0.2);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: var(--bg-gradient); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+    html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0,0,0,0.1); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1002;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+    }
+    header .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      color: transparent;
+      -webkit-text-stroke: 1px white;
+    }
+    nav { display: flex; }
+    header .header-inner nav a {
+      font-family: 'FangSong', '仿宋', serif;
+    }
+    nav a {
+      text-decoration: none;
+      color: #ecf0f1;
+      font-size: 1.2rem;
+      margin: 0 15px;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+    .content { padding-top: 80px; }
+    .profile {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .profile-info { text-align: center; }
+    .profile-info .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: url("coc_1.jpg") no-repeat center/cover;
+      border: 3px solid var(--primary-color);
+      margin: 0 auto 15px;
+    }
+    .profile-info .profile-name { font-size: 2rem; color: #ecf0f1; font-weight: bold; }
+    .profile-info .profile-tag { font-size: 1.2rem; color: #bdc3c7; }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .stat {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      width: 45%;
+      margin: 10px 0;
+      padding: 10px;
+      text-align: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .stat:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+    .stat .label { font-size: 1rem; color: #bdc3c7; }
+    .stat .value { font-size: 1.8rem; color: var(--primary-color); font-weight: bold; }
+    .profile-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .profile-stats .stat-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      width: 30%;
+      margin: 10px 0;
+      padding: 10px;
+      text-align: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .profile-stats .stat-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+    .profile-stats .stat-item .number { font-size: 1.6rem; color: var(--primary-color); font-weight: bold; }
+    .profile-stats .stat-item .text { font-size: 1rem; color: #bdc3c7; }
+    .second-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 600px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .gallery h3 { text-align: center; font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
+    .achievements {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+    .achievement-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 15px;
+      width: 40%;
+      margin: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .achievement-card:hover { transform: scale(1.05); background: rgba(255,255,255,0.15); }
+    .achievement-card .icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background-size: cover;
+      border: 2px solid var(--primary-color);
+    }
+    .achievement-card:nth-child(1) .icon { background-image: url("coc_01.png"); }
+    .achievement-card:nth-child(2) .icon { background-image: url("coc_02.png"); }
+    .achievement-card:nth-child(3) .icon { background-image: url("coc_03.png"); }
+    .achievement-card h4 { font-size: 1.4rem; color: #ecf0f1; margin-bottom: 5px; }
+    .achievement-card p { font-size: 1rem; color: #bdc3c7; margin: 0; }
+    .third-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .experience {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 60%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .experience h3 {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    .exp-cards { width: 100%; }
+    .exp-card {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 15px;
+      padding: 15px;
+      margin: 12px 0;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .exp-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+    .exp-item {
+      flex: 1;
+      text-align: center;
+      font-size: 1rem;
+      color: #ecf0f1;
+      padding: 10px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+    .exp-item:last-child { border-right: none; }
+    footer {
+      background: var(--secondary-color);
+      width: 100%;
+      padding: 20px 0;
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ecf0f1;
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-color);
+      color: var(--secondary-color);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    .floating-btn:hover { transform: scale(1.1); }
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background: rgba(44, 62, 80, 0.95);
+      padding: 30px 20px;
+      transition: left 0.3s ease-in-out;
+      z-index: 1100;
+      overflow-y: auto;
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.5);
+    }
+    .nav-menu.active { left: 0; }
+    .nav-menu h3 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .nav-menu ul { list-style: none; padding: 0; margin: 0; }
+    .nav-menu ul li { margin: 15px 0; }
+    .nav-menu ul li a {
+      text-decoration: none;
+      color: #ecf0f1;
+      font-size: 1.2rem;
+      display: block;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .nav-menu ul li a:hover { background: rgba(241, 196, 15, 0.2); }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      z-index: 1000;
+    }
+    .overlay.active { opacity: 1; visibility: visible; }
+    @media screen and (max-width: 768px) {
+      .stats { flex-direction: column; align-items: center; }
+      .stat { width: 80%; }
+      .achievement-card, .exp-card { width: 90%; }
+    }
+    @media screen and (max-width: 480px) {
+      header h1 { font-size: 2rem; }
+      .stat .value { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="navOverlay"></div>
+  <div class="nav-menu" id="navMenu">
+    <h3>菜单</h3>
+    <ul>
+      <li><a href="#profile">账号</a></li>
+      <li><a href="#gallery">风格</a></li>
+      <li><a href="#experience">历程</a></li>
+    </ul>
+  </div>
+  <button class="floating-btn" id="menuBtn">&#9776;</button>
+  <header>
+    <div class="header-inner">
+      <h1>Clash of Clans</h1>
+      <nav>
+        <a href="#profile">账号</a>
+        <a href="#gallery">风格</a>
+        <a href="#experience">历程</a>
+      </nav>
+    </div>
+  </header>
+  <div class="container content">
+    <section class="profile" id="profile">
+      <div class="profile-info">
+        <div class="profile-image"></div>
+        <div class="profile-name">燧皇</div>
+        <div class="profile-tag">#LLVPU92JU</div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="label">等级</span>
+          <span class="value">183</span>
+        </div>
+        <div class="stat">
+          <span class="label">传奇杯最佳</span>
+          <span class="value">5566</span>
+        </div>
+        <div class="stat">
+          <span class="label">家乡</span>
+          <span class="value">17本</span>
+        </div>
+        <div class="stat">
+          <span class="label">夜世界</span>
+          <span class="value">10本</span>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <div class="number">3200</div>
+          <div class="text">奖杯</div>
+        </div>
+        <div class="stat-item">
+          <div class="number">444</div>
+          <div class="text">战争之星</div>
+        </div>
+        <div class="stat-item">
+          <div class="number">11/2024</div>
+          <div class="text">传奇杯最佳赛季</div>
+        </div>
+      </div>
+    </section>
+    <section class="second-screen">
+      <section class="gallery" id="gallery">
+        <h3>玩家风格</h3>
+        <div class="achievements">
+          <div class="achievement-card">
+            <div class="icon"></div>
+            <h4>养老型</h4>
+            <p>缓慢养成型选手</p>
+          </div>
+          <div class="achievement-card">
+            <div class="icon"></div>
+            <h4>保守派</h4>
+            <p>稳二攻三选手</p>
+          </div>
+          <div class="achievement-card">
+            <div class="icon"></div>
+            <h4>管理党</h4>
+            <p>擅长运营、管理</p>
+          </div>
+        </div>
+      </section>
+    </section>
+    <section class="third-screen">
+      <section class="experience" id="experience">
+        <h3>我的历程</h3>
+        <div class="exp-cards">
+          <div class="exp-card">
+            <div class="exp-item exp-time">2020年12月</div>
+            <div class="exp-item exp-clan">萌新聚集地</div>
+            <div class="exp-item exp-position">管理副手</div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-item exp-time">2021年</div>
+            <div class="exp-item exp-clan">萌新聚集地分部</div>
+            <div class="exp-item exp-position">协调副手</div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-item exp-time">2022年6月</div>
+            <div class="exp-item exp-clan">不离不弃.九个太阳</div>
+            <div class="exp-item exp-position">管理副手</div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-item exp-time">2023年2月</div>
+            <div class="exp-item exp-clan">黑色气息</div>
+            <div class="exp-item exp-position">成员</div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-item exp-time">2024年4月</div>
+            <div class="exp-item exp-clan">Mtadores209</div>
+            <div class="exp-item exp-position">成员</div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+  <footer>
+    <div class="footer-container">
+      &copy; 2025 Kun-游戏进度
+    </div>
+  </footer>
+  <script>
+    var menuBtn = document.getElementById("menuBtn");
+    var navMenu = document.getElementById("navMenu");
+    var navOverlay = document.getElementById("navOverlay");
+    menuBtn.addEventListener("click", function(){
+      navMenu.classList.toggle("active");
+      navOverlay.classList.toggle("active");
+    });
+    navOverlay.addEventListener("click", function(){
+      navMenu.classList.remove("active");
+      navOverlay.classList.remove("active");
+    });
+    function createParticle(){
+      var particle = document.createElement("div");
+      particle.classList.add("particle");
+      particle.style.left = Math.random() * 100 + "%";
+      particle.style.top = Math.random() * 100 + "%";
+      particle.style.animationDuration = (3 + Math.random() * 3) + "s";
+      document.body.appendChild(particle);
+      setTimeout(function(){ particle.remove(); }, 6000);
+    }
+    setInterval(createParticle, 500);
+  </script>
+</body>
+</html>
