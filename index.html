@@ -1,575 +1,1814 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kun - 游戏进度</title>
-  <style>
-    :root {
-      --primary-color: #f1c40f;
-      --secondary-color: #2c3e50;
-      --accent-color: #4ca1af;
-      --bg-gradient: linear-gradient(135deg, #2c3e50, #4ca1af);
-      --card-bg: rgba(255,255,255,0.15);
-      --card-border: rgba(255,255,255,0.2);
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background: var(--bg-gradient); overflow-x: hidden; }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
-    html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0,0,0,0.1); }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1002;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-      padding: 10px 0;
-    }
-    header .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    header h1 {
-      font-size: 2.5rem;
-      color: transparent;
-      -webkit-text-stroke: 1px white;
-    }
-    nav { display: flex; }
-    header .header-inner nav a {
-      font-family: 'FangSong', '仿宋', serif;
-    }
-    nav a {
-      text-decoration: none;
-      color: #ecf0f1;
-      font-size: 1.2rem;
-      margin: 0 15px;
-      position: relative;
-    }
-    nav a::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: var(--primary-color);
-      transition: width 0.3s;
-    }
-    nav a:hover::after { width: 100%; }
-    .content { padding-top: 80px; }
-    .profile {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    .profile-info { text-align: center; }
-    .profile-info .profile-image {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: url("coc_1.jpg") no-repeat center/cover;
-      border: 3px solid var(--primary-color);
-      margin: 0 auto 15px;
-    }
-    .profile-info .profile-name { font-size: 2rem; color: #ecf0f1; font-weight: bold; }
-    .profile-info .profile-tag { font-size: 1.2rem; color: #bdc3c7; }
-    .stats {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-    .stat {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      width: 45%;
-      margin: 10px 0;
-      padding: 10px;
-      text-align: center;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .stat:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
-    .stat .label { font-size: 1rem; color: #bdc3c7; }
-    .stat .value { font-size: 1.8rem; color: var(--primary-color); font-weight: bold; }
-    /* 在“家乡”卡片中添加 superscript 匹配值 */
-    .stat[data-type="home"] .value sup {
-      font-size: 0.6em;
-      vertical-align: super;
-      margin-right: 2px;
-      color: #ecf0f1;
-    }
-    .profile-stats {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-    .profile-stats .stat-item {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      width: 30%;
-      margin: 10px 0;
-      padding: 10px;
-      text-align: center;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .profile-stats .stat-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
-    .profile-stats .stat-item .number { font-size: 1.6rem; color: var(--primary-color); font-weight: bold; }
-    .profile-stats .stat-item .text { font-size: 1rem; color: #bdc3c7; }
-    .second-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .gallery {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 40px;
-      max-width: 600px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    .gallery h3 { text-align: center; font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
-    .achievements {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      width: 100%;
-    }
-    .achievement-card {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--card-border);
-      border-radius: 15px;
-      width: 40%;
-      margin: 10px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: transform 0.3s, background 0.3s;
-    }
-    .achievement-card:hover { transform: scale(1.05); background: rgba(255,255,255,0.15); }
-    .achievement-card .icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 10px;
-      border-radius: 50%;
-      background-size: cover;
-      border: 2px solid var(--primary-color);
-    }
-    .achievement-card:nth-child(1) .icon { background-image: url("coc_01.png"); }
-    .achievement-card:nth-child(2) .icon { background-image: url("coc_02.png"); }
-    .achievement-card:nth-child(3) .icon { background-image: url("coc_03.png"); }
-    .achievement-card h4 { font-size: 1.4rem; color: #ecf0f1; margin-bottom: 5px; }
-    .achievement-card p { font-size: 1rem; color: #bdc3c7; margin: 0; }
-    .third-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .experience {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 30px;
-      width: 60%;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    .experience h3 {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-    }
-    .exp-cards { width: 100%; }
-    .exp-card {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--card-border);
-      border-radius: 15px;
-      padding: 15px;
-      margin: 12px 0;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .exp-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
-    .exp-item {
-      flex: 1;
-      text-align: center;
-      font-size: 1rem;
-      color: #ecf0f1;
-      padding: 10px;
-      border-right: 1px solid rgba(255,255,255,0.2);
-    }
-    .exp-item:last-child { border-right: none; }
-    .unit-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-gradient);
-    }
-    .unit-progress {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 30px;
-      width: 60%;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    .unit-progress h3 {
-      font-size: 2rem;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-    }
-    .progress-item {
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-      color: #ecf0f1;
-    }
-    .progress-bar-container {
-      width: 100%;
-      height: 12px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 6px;
-      margin-top: 8px;
-    }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #4ca1af, #ffff);
-      border-radius: 6px;
-    }
-    footer {
-      background: var(--secondary-color);
-      width: 100%;
-      padding: 20px 0;
-    }
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #ecf0f1;
-    }
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--primary-color);
-      color: var(--secondary-color);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: transform 0.3s;
-    }
-    .floating-btn:hover { transform: scale(1.1); }
-    .nav-menu {
-      position: fixed;
-      top: 0;
-      left: -250px;
-      width: 250px;
-      height: 100%;
-      background: rgba(44, 62, 80, 0.95);
-      padding: 30px 20px;
-      transition: left 0.3s ease-in-out;
-      z-index: 1100;
-      overflow-y: auto;
-      border-top-right-radius: 15px;
-      border-bottom-right-radius: 15px;
-      box-shadow: 4px 0 15px rgba(0,0,0,0.5);
-    }
-    .nav-menu.active { left: 0; }
-    .nav-menu h3 {
-      color: var(--primary-color);
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-    .nav-menu ul { list-style: none; padding: 0; margin: 0; }
-    .nav-menu ul li { margin: 15px 0; }
-    .nav-menu ul li a {
-      text-decoration: none;
-      color: #ecf0f1;
-      font-size: 1.2rem;
-      display: block;
-      padding: 10px 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    .nav-menu ul li a:hover { background: rgba(241, 196, 15, 0.2); }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-      z-index: 1000;
-    }
-    .overlay.active { opacity: 1; visibility: visible; }
-    @media screen and (max-width: 768px) {
-      .stats { flex-direction: column; align-items: center; }
-      .stat { width: 80%; }
-      .achievement-card, .exp-card { width: 90%; }
-    }
-    @media screen and (max-width: 480px) {
-      header h1 { font-size: 2rem; }
-      .stat .value { font-size: 1.5rem; }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="部落冲突部落, 部落冲突招人, 小楼一夜听风雨, 部落招人">
+    <meta name="description" content="我们是一支团结协作的精英部落，无论攻防，我们一同进退，不断刷新部落排名。加入我们，共创荣耀！">
+    <link rel="icon" href="buluo.png">
+    <title>月汐幽屿 – 联盟官网</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7DA27D;
+            --primary-light: #A3C9A3;
+            --primary-dark: #5A815A;
+            --secondary: #4A7B9D;
+            --accent: #E9B44C;
+            --light: #F8F9FA;
+            --light-gray: #E9ECEF;
+            --dark: #343A40;
+            --text: #495057;
+            --text-light: #868E96;
+            --border-radius: 16px;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #F8F9FA, #E9ECEF);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        a {
+            text-decoration: none;
+            transition: var(--transition);
+            color: var(--primary-dark);
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(125, 162, 125, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+        }
+
+        .btn-accent:hover {
+            background: #D9A23D;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--primary-dark);
+            display: inline-block;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+            margin-right: 8px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin: 0 12px;
+        }
+
+        .nav-menu a {
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--dark);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(125, 162, 125, 0.1);
+            color: var(--primary-dark);
+        }
+
+        .nav-menu a.active {
+            background: rgba(125, 162, 125, 0.15);
+            color: var(--primary-dark);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            margin: 5px;
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(125, 162, 125, 0.15), rgba(233, 180, 76, 0.1));
+            overflow: hidden;
+            padding: 100px 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .reward-notice {
+            display: block;
+            font-size: 1.1rem;
+            color: #6c757d;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease 0.1s both;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(var(--primary) 2px, transparent 2px),
+                radial-gradient(var(--accent) 2px, transparent 2px);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            z-index: 1;
+        }
+
+        .clan-info {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .clan-info:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .clan-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .clan-icon {
+            flex-shrink: 0;
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            margin-right: 24px;
+        }
+
+        .clan-title h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .clan-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .clan-type.main {
+            background: rgba(125, 162, 125, 0.2);
+            color: var(--primary-dark);
+        }
+
+        .clan-type.sub {
+            background: rgba(74, 123, 157, 0.2);
+            color: var(--secondary);
+        }
+
+        .clan-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .detail-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-item i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .detail-item h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .detail-item p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status.active {
+            background: rgba(125, 162, 125, 0.2);
+            color: var(--primary-dark);
+        }
+
+        .status.inactive {
+            background: rgba(233, 76, 76, 0.2);
+            color: #E94C4C;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-header {
+            padding: 25px 20px 15px;
+        }
+
+        .member-card.leader .member-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+        }
+
+        .member-card.officer .member-header {
+            background: linear-gradient(to right, var(--secondary), #5D9BC6);
+        }
+
+        .member-card.oleader .member-header {
+            background: linear-gradient(to right, #E9B44C, #F0C879);
+        }
+
+        .member-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 15px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-light);
+        }
+
+        .member-name {
+            font-size: 1.4rem;
+            color: white;
+        }
+
+        .member-role {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .member-info {
+            padding: 20px;
+        }
+
+        .war-log {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .war-log:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .war-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .war-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .win-label {
+            background: linear-gradient(to right, #FFD700, #FFC107);
+            color: #856404;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .war-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .vs {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .rules-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .rule-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .rule-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .rule-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(125, 162, 125, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .rule-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .rule-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .rule-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--light-gray);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .rule-list li:before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            display: inline-block;
+            width: 20px;
+            font-size: 1.2rem;
+        }
+
+        .join-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 50px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-container:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        .join-title {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .wechat {
+            font-size: 1.2rem;
+            margin: 25px 0;
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            display: inline-block;
+        }
+
+        .wechat strong {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .join-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .wall-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .wall-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .wall-title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .wall-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            display: inline-block;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .wall-title h2:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .wall-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .honor-card {
+            background: rgba(125, 162, 125, 0.1);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .honor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .shame-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            text-align: center;
+            transition: var(--transition);
+            min-height: 300px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .shame-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
+                url('x2.jpg') center/cover no-repeat; 
+            z-index: 1;
+            opacity: 0.9;
+            border-radius: var(--border-radius);
+        }
+
+        .shame-card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .shame-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .shame-card:hover::before {
+            opacity: 0.8;
+        }
+
+        .wall-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            overflow: hidden;
+        }
+
+        .wall-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wall-name {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .wall-reason {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .like-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .like-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .like-btn.disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .like-btn.disabled:hover {
+            transform: none;
+        }
+
+        .like-count {
+            display: inline-block;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary-light);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .section-title h2 {
+                font-size: 2.4rem;
+            }
+            .wall-title h2 {
+                font-size: 2rem;
+            }
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                right: -100%;
+                flex-direction: column;
+                background: white;
+                width: 280px;
+                height: calc(100vh - 80px);
+                padding: 40px 20px;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-menu li {
+                margin: 10px 0;
+            }
+
+            .hamburger {
+                display: block;
+                z-index: 1000;
+            }
+
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+            }
+
+            section {
+                padding: 70px 0;
+            }
+            .shame-card {
+                min-height: 250px; 
+                padding: 15px; 
+            }
+
+            .shame-card > * {
+                position: relative;
+                z-index: 2;
+            }
+            
+            .reward-notice {
+                font-size: 0.95rem;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            .wall-title h2 {
+                font-size: 1.8rem;
+            }
+            .clan-details {
+                grid-template-columns: 1fr;
+            }
+
+            .war-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .join-container {
+                padding: 30px 20px;
+            }
+
+            .join-buttons {
+                flex-direction: column;
+            }
+            
+            .reward-notice {
+                font-size: 0.85rem;
+            }
+            }
+            #coc-intro-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+            }
+
+            #coc-intro-animation.hide {
+            opacity: 0;
+            pointer-events: none;
+            }
+
+            .coc-logo {
+            position: relative;
+            z-index: 2;
+            animation: logoEntrance 2.5s ease-in-out forwards;
+            }
+
+            .coc-logo img {
+            width: 200px;
+            height: 200px;
+            filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.8));
+            transition: transform 1s ease-out, opacity 1s ease-out;
+            }
+
+            .coc-logo.exit img {
+            transform: scale(2.5);
+            opacity: 0;
+            filter: drop-shadow(0 0 40px rgba(218, 165, 32, 0.9));
+            }
+
+            @keyframes logoEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.1) rotate(-180deg);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.2) rotate(10deg);
+            }
+            45% {
+                transform: scale(0.95) rotate(-5deg);
+            }
+            60% {
+                transform: scale(1.05) rotate(2deg);
+            }
+            75% {
+                transform: scale(1) rotate(0);
+            }
+            80% {
+                transform: scale(1) rotate(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+            }
+
+            .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            }
+
+            .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(218, 165, 32, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            }
+
+            .particle:nth-child(1) {
+            width: 10px;
+            height: 10px;
+            top: 30%;
+            left: 50%;
+            animation: particleFloat 1.5s ease-out 0.5s forwards;
+            }
+
+            .particle:nth-child(2) {
+            width: 8px;
+            height: 8px;
+            top: 40%;
+            left: 30%;
+            animation: particleFloat 1.5s ease-out 0.7s forwards;
+            }
+
+            .particle:nth-child(3) {
+            width: 12px;
+            height: 12px;
+            top: 50%;
+            left: 70%;
+            animation: particleFloat 1.5s ease-out 0.9s forwards;
+            }
+
+            .particle:nth-child(4) {
+            width: 6px;
+            height: 6px;
+            top: 60%;
+            left: 20%;
+            animation: particleFloat 1.5s ease-out 1.1s forwards;
+            }
+
+            .particle:nth-child(5) {
+            width: 9px;
+            height: 9px;
+            top: 20%;
+            left: 60%;
+            animation: particleFloat 1.5s ease-out 1.3s forwards;
+            }
+
+            .particle:nth-child(6) {
+            width: 7px;
+            height: 7px;
+            top: 70%;
+            left: 40%;
+            animation: particleFloat 1.5s ease-out 1.5s forwards;
+            }
+
+            .particle:nth-child(7) {
+            width: 11px;
+            height: 11px;
+            top: 35%;
+            left: 80%;
+            animation: particleFloat 1.5s ease-out 1.7s forwards;
+            }
+
+            .particle:nth-child(8) {
+            width: 5px;
+            height: 5px;
+            top: 65%;
+            left: 10%;
+            animation: particleFloat 1.5s ease-out 1.9s forwards;
+            }
+
+            @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1);
+            }
+            }
+
+            .exit-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            }
+
+            .exit-particles.active {
+            opacity: 1;
+            }
+
+            .exit-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(218, 165, 32, 0.9) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            width: 15px;
+            height: 15px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            }
+
+            .exit-particle:nth-child(1) {
+            animation: exitParticle 1s ease-out 0s forwards;
+            }
+
+            .exit-particle:nth-child(2) {
+            animation: exitParticle 1s ease-out 0.1s forwards;
+            }
+
+            .exit-particle:nth-child(3) {
+            animation: exitParticle 1s ease-out 0.2s forwards;
+            }
+
+            .exit-particle:nth-child(4) {
+            animation: exitParticle 1s ease-out 0.3s forwards;
+            }
+
+            .exit-particle:nth-child(5) {
+            animation: exitParticle 1s ease-out 0.4s forwards;
+            }
+
+            .exit-particle:nth-child(6) {
+            animation: exitParticle 1s ease-out 0.5s forwards;
+            }
+
+            @keyframes exitParticle {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(
+                calc(-50% + var(--exit-tx, 0px)), 
+                calc(-50% + var(--exit-ty, 0px))
+                ) scale(1.5);
+            }
+            }
+
+            @media (max-width: 768px) {
+            .coc-logo img {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .coc-logo.exit img {
+                transform: scale(2);
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="overlay" id="navOverlay"></div>
-  <div class="nav-menu" id="navMenu">
-    <h3>菜单</h3>
-    <ul>
-      <li><a href="#profile">村庄</a></li>
-      <li><a href="#gallery">风格</a></li>
-      <li><a href="#experience">历程</a></li>
-      <li><a href="#unit-progress">进展</a></li>
-    </ul>
+<div id="coc-intro-animation">
+  <div class="coc-logo">
+    <img src="coc.logo.png" alt="联盟徽章">
   </div>
-  <button class="floating-btn" id="menuBtn">&#9776;</button>
-  <header>
-    <div class="header-inner">
-      <h1>Clash of Clans</h1>
-      <nav>
-        <a href="#profile">账号</a>
-        <a href="#gallery">风格</a>
-        <a href="#experience">历程</a>
-        <a href="#unit-progress">进展</a>
-      </nav>
-    </div>
-  </header>
-  <div class="container content">
-    <section class="profile" id="profile">
-      <div class="profile-info">
-        <div class="profile-image"></div>
-        <div class="profile-name">燧皇</div>
-        <div class="profile-tag">#LLVPU92JU</div>
-      </div>
-      <div class="stats">
-        <div class="stat">
-          <span class="label">等级</span>
-          <span class="value">183</span>
-        </div>
-        <div class="stat">
-          <span class="label">传奇杯最佳</span>
-          <span class="value">5566</span>
-        </div>
-        <div class="stat" data-type="home">
-          <span class="label">家乡</span>
-          <span class="value">17本<sup style="color: #fdd843da;">688</sup></span>
-        </div>
-        <div class="stat">
-          <span class="label">夜世界</span>
-          <span class="value">10本</span>
-        </div>
-      </div>
-      <div class="profile-stats">
-        <div class="stat-item">
-          <div class="number">3200</div>
-          <div class="text">奖杯</div>
-        </div>
-        <div class="stat-item">
-          <div class="number">444</div>
-          <div class="text">战争之星</div>
-        </div>
-        <div class="stat-item">
-          <div class="number">11/2024</div>
-          <div class="text">传奇杯最佳赛季</div>
-        </div>
-      </div>
-    </section>
-    <section class="second-screen">
-      <section class="gallery" id="gallery">
-        <h3>玩家风格</h3>
-        <div class="achievements">
-          <div class="achievement-card">
-            <div class="icon"></div>
-            <h4>养老型</h4>
-            <p>缓慢养成型选手</p>
-          </div>
-          <div class="achievement-card">
-            <div class="icon"></div>
-            <h4>保守派</h4>
-            <p>稳二攻三选手</p>
-          </div>
-          <div class="achievement-card">
-            <div class="icon"></div>
-            <h4>管理党</h4>
-            <p>擅长运营、管理</p>
-          </div>
-        </div>
-      </section>
-    </section>
-    <section class="third-screen">
-      <section class="experience" id="experience">
-        <h3>我的历程</h3>
-        <div class="exp-cards">
-          <div class="exp-card">
-            <div class="exp-item exp-time">2020年12月</div>
-            <div class="exp-item exp-clan">萌新聚集地</div>
-            <div class="exp-item exp-position">管理副手</div>
-          </div>
-          <div class="exp-card">
-            <div class="exp-item exp-time">2021年</div>
-            <div class="exp-item exp-clan">萌新聚集地分部</div>
-            <div class="exp-item exp-position">协调副手</div>
-          </div>
-          <div class="exp-card">
-            <div class="exp-item exp-time">2022年6月</div>
-            <div class="exp-item exp-clan">不离不弃.九个太阳</div>
-            <div class="exp-item exp-position">管理副手</div>
-          </div>
-          <div class="exp-card">
-            <div class="exp-item exp-time">2023年2月</div>
-            <div class="exp-item exp-clan">黑色气息</div>
-            <div class="exp-item exp-position">成员</div>
-          </div>
-          <div class="exp-card">
-            <div class="exp-item exp-time">2024年4月</div>
-            <div class="exp-item exp-clan">Mtadores209</div>
-            <div class="exp-item exp-position">成员</div>
-          </div>
-        </div>
-      </section>
-    </section>
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
   </div>
-  <section class="unit-screen" id="unit-progress">
-    <div class="unit-progress">
-      <h3>村庄进展</h3>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">英雄</span>
-          <span class="progress-value">93.73%</span>
+  <div class="exit-particles">
+    <div class="exit-particle"></div>
+    <div class="exit-particle"></div>
+    <div class="exit-particle"></div>
+    <div class="exit-particle"></div>
+    <div class="exit-particle"></div>
+    <div class="exit-particle"></div>
+  </div>
+</div>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">
+                <i class="a"><img src="buluo.png" alt="部落图标"/></i>
+                <span><a href="index.php">月汐幽屿</a></span>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="#recruit">招募</a></li>
+                <li><a href="#info">简介</a></li>
+                <li><a href="#rules">规则</a></li>
+                <li><a href="b1.html">总部</a></li>
+                <li><a href="b2.html">攻略中心</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 93.73%;"></div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-pattern"></div>
+        <div class="hero-content">
+            <span class="reward-notice">本部设有奖惩，表现好奖月卡</span>
+            <h1>月汐幽屿</h1>
+            <p>Clash of Clans 部落联盟</p>
+            <div class="hero-btns">
+                <a href="#join" class="btn">立即加入</a>
+                <a href="#info" class="btn btn-outline">查看分部</a>
+            </div>
         </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">英雄装备</span>
-          <span class="progress-value">50.6%</span>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>关于我们</h2>
+            </div>
+            <div class="clan-info">
+                <p class="section-subtitle">我们是一支团结协作的精英部落，无论攻防，我们一同进退，不断刷新部落排名。加入我们，共创荣耀。</p>
+
+                <div class="clan-details">
+                    <div class="detail-item">
+                        <i class="fas fa-users"></i>
+                        <h4>团结协作</h4>
+                        <p>成员之间紧密合作，共同进步</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-trophy"></i>
+                        <h4>精英部落</h4>
+                        <p>追求卓越，不断刷新排名</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>攻防一体</h4>
+                        <p>无论进攻防守，我们一同进退</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-medal"></i>
+                        <h4>共创荣耀</h4>
+                        <p>加入我们，书写新的传奇</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 50.6%;"></div>
+    </section>
+
+    <section id="recruit"
+        style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
+        <div class="container">
+            <div class="section-title">
+                <h2>精英殿·卓越之选</h2>
+            </div>
+            <p class="section-subtitle">与你携手，打破极限，成为我们部落的荣耀之师！</p>
+
+            <div class="clan-info">
+                <div class="recruit-content">
+                    <p style="font-size: 1.2rem; margin-bottom: 20px; text-align: center;">
+                        <i class="fas fa-star" style="color: var(--accent);"></i>
+                        <strong>诚邀大本营12级及以上、热爱交流且积极参与部落战的活跃玩家加入</strong>
+                    </p>
+
+                    <p style="font-size: 1.2rem; text-align: center;">
+                        <i class="fas fa-handshake" style="color: var(--accent);"></i>
+                        <strong>共同铸就充满活力与荣耀的精英社群！</strong>
+                    </p>
+
+                    <div style="display: flex; justify-content: center; margin-top: 30px;">
+                        <a href="#join" class="btn btn-accent">立即申请</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">宠物</span>
-          <span class="progress-value">65.22%</span>
+    </section>
+
+    <section id="info">
+        <div class="container">
+            <div class="section-title">
+                <h2>部落简介</h2>
+            </div>
+            <p class="section-subtitle">我们拥有多个部落分部，满足不同玩家需求</p>
+
+            <div class="clan-info">
+                <div class="clan-header">
+                    <div class="clan-icon" style="background-image:url('buluo.png');"></div>
+                    <div class="clan-title">
+                        <span class="clan-type main">总部</span>
+                        <h3><a href="b1.html" style="color:inherit;text-decoration:none;">小楼一夜听风雨</a></h3>
+                    </div>
+                </div>
+
+                <div class="clan-details">
+                    <div class="detail-item">
+                        <i class="fas fa-hashtag"></i>
+                        <h4>部落标签</h4>
+                        <p>#2R99JVCV</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-chess-rook"></i>
+                        <h4>都城等级</h4>
+                        <p>10 级</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-trophy"></i>
+                        <h4>联赛等级</h4>
+                        <p>金杯 II</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h4>捐兵系统</h4>
+                        <p>自动奶</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>部落状态</h4>
+                        <span class="status active">启用✅</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clan-info">
+                <div class="clan-header">
+                    <div class="clan-icon" style="background-image:url('tiandi.png');"></div>
+                    <div class="clan-title">
+                        <span class="clan-type sub">分部</span>
+                        <h3>天地之间任我猖狂</h3>
+                    </div>
+                </div>
+
+                <div class="clan-details">
+                    <div class="detail-item">
+                        <i class="fas fa-hashtag"></i>
+                        <h4>部落标签</h4>
+                        <p>#P2V8PYC8</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-chess-rook"></i>
+                        <h4>都城等级</h4>
+                        <p>10 级</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-trophy"></i>
+                        <h4>联赛等级</h4>
+                        <p>大师 III</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h4>捐兵系统</h4>
+                        <p>自动奶</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>部落状态</h4>
+                        <span class="status active">启用✅</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clan-details" style="margin-top: 30px;">
+                <div class="detail-item">
+                    <i class="fas fa-code-branch"></i>
+                    <h4>萌新聚集地 3级</h4>
+                    <p>养老营</p>
+                    <p>标签：#2GLYR0CGP</p>
+                    <p>联赛：未定级</p>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-code-branch"></i>
+                    <h4>霸王 20级</h4>
+                    <p>备用分部</p>
+                    <p>标签：#CGUUCYJQ</p>
+                    <p>联赛：水晶I</p>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-code-branch"></i>
+                    <h4>重庆江北 11级</h4>
+                    <p>备用分部</p>
+                    <p>标签：#P8V8JCU</p>
+                    <p>联赛：未排名</p>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-ghost"></i>
+                    <h4>追昔 11级</h4>
+                    <p>联赛壳子</p>
+                    <p>标签：#2RL2YLJ08</p>
+                    <p>联赛：黄金 II</p>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-ghost"></i>
+                    <h4>CHAMP⚔️ DYNASTY 6级</h4>
+                    <p>联赛壳子</p>
+                    <p>标签：#2G2J0R9JP</p>
+                    <p>联赛：水晶 II</p>
+                </div>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 65.22%;"></div>
+    </section>
+
+    <section id="warlog"
+        style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
+        <div class="container">
+            <div class="section-title">
+                <h2>近期战报</h2>
+            </div>
+
+            <div class="war-log">
+                <div class="war-header">
+                    <div class="war-title">第 698 场部落战</div>
+                    <div class="win-label">胜利</div>
+                </div>
+
+                <div class="war-stats">
+                    <div class="stat">
+                        <div class="stat-value">105⭐</div>
+                        <div class="stat-label">我方战绩</div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <div class="stat">
+                        <div class="stat-value">104⭐</div>
+                        <div class="stat-label">敌方战绩</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="war-log">
+                <div class="war-header">
+                    <div class="war-title">第 697 场部落战</div>
+                    <div class="win-label">胜利</div>
+                </div>
+
+                <div class="war-stats">
+                    <div class="stat">
+                        <div class="stat-value">105⭐</div>
+                        <div class="stat-label">我方战绩</div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <div class="stat">
+                        <div class="stat-value">90⭐</div>
+                        <div class="stat-label">敌方战绩</div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">攻城机器</span>
-          <span class="progress-value">47.37%</span>
+    </section>
+
+    <section id="members">
+        <div class="container">
+            <div class="section-title">
+                <h2>部落管理</h2>
+            </div>
+
+            <div class="members-grid">
+                <div class="member-card leader">
+                    <div class="member-header">
+                        <div class="member-avatar" style="overflow: hidden;">
+                            <img src="suihuang.jpg" alt="头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                        </div>
+                        <h3 class="member-name">燧皇</h3>
+                        <div class="member-role">首领</div>
+                    </div>
+                    <div class="member-info">
+                        <p>创始人与领导者</p>
+                    </div>
+                </div>
+
+                <div class="member-card officer">
+                    <div class="member-header">
+                        <div class="member-avatar">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="member-name">太一</h3>
+                        <div class="member-role">副手</div>
+                    </div>
+                    <div class="member-info">
+                        <p>日常管理与部落战</p>
+                    </div>
+                </div>
+
+                <div class="member-card officer">
+                    <div class="member-header">
+                        <div class="member-avatar">
+                            <img src="公猪.jpg" alt="头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                        </div>
+                        <h3 class="member-name">白雪公猪</h3>
+                        <div class="member-role">副手</div>
+                    </div>
+                    <div class="member-info">
+                        <p>日常管理</p>
+                    </div>
+                </div>
+
+                <div class="member-card officer">
+                    <div class="member-header">
+                        <div class="member-avatar">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="member-name">牛牛</h3>
+                        <div class="member-role">副手</div>
+                    </div>
+                    <div class="member-info">
+                        <p>日常管理</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 47.37%;"></div>
+    </section>
+
+    <section id="rules"
+        style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
+        <div class="container">
+            <div class="section-title">
+                <h2>部落规则</h2>
+            </div>
+
+            <div class="rules-container">
+
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="rule-title">二、奖励</h3>
+                    <p>联赛
+                    <ul>额外奖励分配：表现排名前七者+联赛捐兵者</ul>
+                    <ul>其他奖励：部落晋级，全员抽黄金令牌</ul>
+                    </p>
+                    <br>
+                    <p>轮换副手
+                    <ul>升职奖励：黄金令牌x1</ul>
+                    </p>
+                    <br>
+                    <p>特殊活动（不定时）
+                    <ul>活跃大奖：黄金令牌x1</ul>
+                    </p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="rule-title">三、惩戒</h3>
+                    <p>凡出现下列任一情形者，予以清退部落处理：</p>
+                    <ul class="rule-list">
+                        <li>连续三日未上线；</li>
+                        <li>进部落三日内未加群；</li>
+                        <li>活动积分低于部落最低标准（竞赛800）；</li>
+                        <li>部落战或联赛消极参与，无正当理由缺席；</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">军队</span>
-          <span class="progress-value">88.76%</span>
+    </section>
+
+    <section id="honor">
+        <div class="container">
+            <div class="wall-section">
+                <div class="wall-title">
+                    <h2>荣誉墙</h2>
+                </div>
+                <p class="wall-subtitle">嘉奖表现卓越者</p>
+                
+                <div class="wall-grid">
+                    <div class="honor-card">
+                        <div class="wall-avatar">
+                            <i class="fas fa-medal" style="font-size: 3rem; color: gold; line-height: 80px;"></i>
+                        </div>
+                        <h3 class="wall-name">平果</h3>
+                        <p class="wall-reason">联赛表现卓越</p>
+                        <p>8月黄金令牌奖励</p>
+                    </div>
+                    
+                    <div class="honor-card">
+                        <div class="wall-avatar">
+                            <i class="fas fa-medal" style="font-size: 3rem; color: gold; line-height: 80px;"></i>
+                        </div>
+                        <h3 class="wall-name">什么罐子说</h3>
+                        <p class="wall-reason">联赛表现卓越</p>
+                        <p>8月黄金令牌奖励</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 88.76%;"></div>
+    </section>
+
+    <section id="join">
+        <div class="container">
+            <div class="join-container">
+                <h2 class="join-title">加入我们</h2>
+                <p>成为我们精英部落的一员，一起创造新的辉煌！</p>
+
+                <div class="wechat">
+                    <i class="fab fa-weixin"></i> 微信号：<strong>hiddenohob</strong>
+                </div>
+
+                <div class="join-buttons">
+                    <a href="https://link.clashofclans.com/cn?action=OpenClanProfile&tag=2R99JVCV" class="btn">
+                        <i class="fas fa-home"></i> 加入总部
+                    </a>
+                    <a href="https://link.clashofclans.com/cn?action=OpenClanProfile&tag=P2V8PYC8" class="btn">
+                        <i class="fas fa-code-branch"></i> 加入分部
+                    </a>
+                    <a href="https://link.clashofclans.com/cn?action=OpenClanProfile&tag=2G2J0R9JP" class="btn">
+                        <i class="fas fa-ghost"></i> 加入壳子
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">黑暗部队</span>
-          <span class="progress-value">86.81%</span>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3>月汐幽屿</h3>
+                <p>Clash of Clans 部落联盟</p>
+
+                <div class="social-links">
+                    <a href="https://qm.qq.com/q/eg3TOOQMYo"><i class="fab fa-qq"></i></a>
+                </div>
+
+                <p class="copyright">本站内容若有不尽之处，本部落有绝对权随时増删，其它人士不得有异议<br>© 2025 Clash of Clans 月汐幽屿 | 部落联盟 | </p>
+            </div>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 86.81%;"></div>
-        </div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-text">
-          <span class="progress-label">法术</span>
-          <span class="progress-value">82.52%</span>
-        </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 82.52%;"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <footer>
-    <div class="footer-container">
-      &copy; 2025 Kun-游戏进度
-    </div>
-  </footer>
-  <script>
-    var menuBtn = document.getElementById("menuBtn");
-    var navMenu = document.getElementById("navMenu");
-    var navOverlay = document.getElementById("navOverlay");
-    menuBtn.addEventListener("click", function(){
-      navMenu.classList.toggle("active");
-      navOverlay.classList.toggle("active");
+    </footer>
+
+    <script>
+    // 动画控制脚本
+    document.addEventListener('DOMContentLoaded', function() {
+        const animation = document.getElementById('coc-intro-animation');
+        const logo = document.querySelector('.coc-logo');
+        const particles = document.querySelectorAll('.particle');
+        const exitParticles = document.querySelectorAll('.exit-particle');
+        const exitContainer = document.querySelector('.exit-particles');
+    
+    // 设置粒子随机方向
+    particles.forEach(particle => {
+        const tx = (Math.random() - 0.5) * 200;
+        const ty = (Math.random() - 0.5) * 200;
+        particle.style.setProperty('--tx', `${tx}px`);
+        particle.style.setProperty('--ty', `${ty}px`);
     });
-    navOverlay.addEventListener("click", function(){
-      navMenu.classList.remove("active");
-      navOverlay.classList.remove("active");
+    
+    // 设置退出粒子随机方向（向外扩散）
+    exitParticles.forEach(particle => {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 100 + Math.random() * 150;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        particle.style.setProperty('--exit-tx', `${tx}px`);
+        particle.style.setProperty('--exit-ty', `${ty}px`);
     });
-    function createParticle(){
-      var particle = document.createElement("div");
-      particle.classList.add("particle");
-      particle.style.left = Math.random() * 100 + "%";
-      particle.style.top = Math.random() * 100 + "%";
-      particle.style.animationDuration = (3 + Math.random() * 3) + "s";
-      document.body.appendChild(particle);
-      setTimeout(function(){ particle.remove(); }, 6000);
-    }
-    setInterval(createParticle, 500);
-  </script>
+    
+    // 2.5秒后开始退出动画
+    setTimeout(() => {
+        // 激活退出粒子效果
+        exitContainer.classList.add('active');
+        
+        // 添加退出类，触发徽章放大消失
+        logo.classList.add('exit');
+        
+        // 3秒后隐藏整个动画层
+        setTimeout(() => {
+        animation.classList.add('hide');
+        
+        // 动画结束后移除元素
+        setTimeout(() => {
+            animation.remove();
+        }, 800);
+        }, 1000);
+    }, 2500);
+    });
+        // 导航菜单切换
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+    
+    // 关闭移动菜单当点击链接
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+    
+    // 滚动时激活导航链接
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      
+      let current = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (pageYOffset >= (sectionTop - 100)) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    });
+    
+    // 滚动时导航栏效果
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 50) {
+        nav.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        nav.style.background = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        nav.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
+        nav.style.background = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+    
+    </script>
 </body>
+
 </html>
