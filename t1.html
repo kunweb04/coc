@@ -31,8 +31,6 @@
             --border-radius: 16px;
             --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
-            --bg-odd: rgba(125, 162, 125, 0.05);
-            --bg-even: rgba(233, 180, 76, 0.03);
         }
 
         html {
@@ -93,10 +91,9 @@
         }
 
         .btn:hover {
-            background: #5a815a;
+            background: var(--primary-dark);
             transform: translateY(-3px);
             box-shadow: 0 12px 20px rgba(125, 162, 125, 0.3);
-            color: white;
         }
 
         .btn-outline {
@@ -108,18 +105,14 @@
         .btn-outline:hover {
             background: var(--primary);
             color: white;
-            transform: translateY(-3px);
         }
 
         .btn-accent {
             background: var(--accent);
-            color: #5c3c00;
         }
 
         .btn-accent:hover {
-            background: #d9a23d;
-            color: #5c3c00;
-            transform: translateY(-3px);
+            background: #D9A23D;
         }
 
         section {
@@ -249,10 +242,9 @@
         }
 
         .join-btn:hover {
-            background: #5a815a;
+            background: var(--primary-dark);
             transform: translateY(-3px);
             box-shadow: 0 12px 20px rgba(125, 162, 125, 0.3);
-            color: white;
         }
 
         .mobile-toggle {
@@ -530,7 +522,6 @@
 
         .member-header {
             padding: 25px 20px 15px;
-            position: relative;
         }
 
         .member-card.leader .member-header {
@@ -557,130 +548,23 @@
             justify-content: center;
             font-size: 2.5rem;
             color: var(--text-light);
-            overflow: hidden;
-        }
-
-        .member-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .member-name {
             font-size: 1.4rem;
             color: white;
-            margin-bottom: 5px;
-        }
-
-        .member-title {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.25);
-            color: rgba(255, 255, 255, 0.95);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-            font-style: normal;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
         }
 
         .member-role {
-            color: rgba(255, 255, 255, 0.95);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
             margin-top: 5px;
-            font-weight: 500;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
         }
 
         .member-info {
             padding: 20px;
         }
 
-        .war-reports {
-            margin-top: 60px;
-        }
-        
-        .war-reports-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .war-report-item {
-            display: flex;
-            align-items: center;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .war-report-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .war-number {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--primary-dark);
-            min-width: 120px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .war-number i {
-            margin-right: 8px;
-            color: var(--accent);
-        }
-        
-        .war-result {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-grow: 1;
-        }
-        
-        .war-score {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .war-outcome {
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .war-outcome.win {
-            background: rgba(125, 162, 125, 0.15);
-            color: var(--primary-dark);
-            border: 1px solid rgba(125, 162, 125, 0.3);
-        }
-        
-        .war-outcome.draw {
-            background: rgba(233, 180, 76, 0.15);
-            color: #856404;
-            border: 1px solid rgba(233, 180, 76, 0.3);
-        }
-        
         .war-log {
             background: white;
             border-radius: var(--border-radius);
@@ -1004,7 +888,7 @@
         }
 
         .like-btn:hover {
-            background: #5a815a;
+            background: var(--primary-dark);
             transform: translateY(-3px);
         }
 
@@ -1026,79 +910,49 @@
         footer {
             background: var(--dark);
             color: white;
-            padding: 60px 0 40px;
+            text-align: center;
+            padding: 40px 0;
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
         }
 
-        .footer-column h4 {
-            color: var(--primary-light);
+        .footer-logo {
+            font-size: 2rem;
             margin-bottom: 20px;
-            font-size: 1.2rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h4:after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--accent);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-links a:hover {
             color: var(--primary-light);
-            transform: translateX(5px);
         }
 
-        .footer-links i {
-            margin-right: 10px;
-            width: 16px;
-            text-align: center;
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
         }
 
-        .footer-bottom {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
         }
 
         .copyright {
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.95rem;
-        }
-
-        section.bg-odd {
-            background-color: var(--bg-odd);
-        }
-
-        section.bg-even {
-            background-color: var(--bg-even);
         }
 
         @keyframes fadeInUp {
@@ -1120,11 +974,6 @@
             
             .main-content {
                 margin-left: 220px;
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 40px 20px;
             }
         }
 
@@ -1226,30 +1075,6 @@
                 min-height: 250px; 
                 padding: 15px; 
             }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .footer-bottom {
-                margin-top: 40px;
-            }
-            
-            .war-report-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            
-            .war-number {
-                min-width: auto;
-            }
-            
-            .war-result {
-                flex-direction: column;
-                gap: 10px;
-            }
         }
     </style>
 </head>
@@ -1270,11 +1095,11 @@
         </div>
 
         <ul class="nav-menu">
-            <li><a href="#about"><i class="fas fa-users"></i>关于我们</a></li>
+            <li><a href="#recruit"><i class="fas fa-users"></i>招募</a></li>
             <li><a href="#info"><i class="fas fa-info-circle"></i>简介</a></li>
             <li><a href="#rules"><i class="fas fa-list-alt"></i>规则</a></li>
-            <li><a href="#recruit"><i class="fas fa-bullhorn"></i>招募</a></li>
-            <li><a href="#honor"><i class="fas fa-medal"></i>荣誉墙</a></li>
+            <li><a href="b1.html"><i class="fas fa-crown"></i>总部</a></li>
+            <li><a href="b2.html"><i class="fas fa-book"></i>攻略中心</a></li>
         </ul>
 
         <div class="nav-footer">
@@ -1298,29 +1123,29 @@
             </div>
         </section>
 
-        <section id="about" class="bg-odd">
+        <section id="about">
             <div class="container">
                 <div class="section-title">
                     <h2>关于我们</h2>
                 </div>
                 <div class="clan-info">
-                    <p class="section-subtitle">我们是一支团结协作的精英部落，以混营为定位。平日并肩奋战于部落战联赛，切磋技艺，交流心得，共同成长。</p>
+                    <p class="section-subtitle">我们是一支团结协作的精英部落，无论攻防，我们一同进退，不断刷新部落排名。加入我们，共创荣耀。</p>
 
                     <div class="clan-details">
                         <div class="detail-item">
                             <i class="fas fa-users"></i>
                             <h4>团结协作</h4>
-                            <p>成员间紧密合作，共同进步</p>
+                            <p>成员之间紧密合作，共同进步</p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-trophy"></i>
                             <h4>精英部落</h4>
-                            <p>追求卓越，刷新排名</p>
+                            <p>追求卓越，不断刷新排名</p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-shield-alt"></i>
-                            <h4>技术传承</h4>
-                            <p>切磋战术，不断成长</p>
+                            <h4>攻防一体</h4>
+                            <p>无论进攻防守，我们一同进退</p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-medal"></i>
@@ -1332,7 +1157,28 @@
             </div>
         </section>
 
-        <section id="info" class="bg-even">
+        <section id="recruit"
+            style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
+            <div class="container">
+                <div class="section-title">
+                    <h2>精英殿·卓越之选</h2>
+                </div>
+                <p class="section-subtitle">与你携手，打破极限，成为我们部落的荣耀之师！</p>
+
+                <div class="clan-info">
+                    <div class="recruit-content">
+                        <p style="font-size: 1.2rem; margin-bottom: 20px; text-align: center;">
+                            <strong>诚邀大本营12级及以上、热爱交流的活跃玩家加入</strong>
+                        </p>
+                        <div style="display: flex; justify-content: center; margin-top: 30px;">
+                            <a href="#join" class="btn btn-accent">立即申请</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="info">
             <div class="container">
                 <div class="section-title">
                     <h2>部落简介</h2>
@@ -1344,7 +1190,7 @@
                         <div class="clan-icon" style="background-image:url('buluo.png');"></div>
                         <div class="clan-title">
                             <span class="clan-type main">总部</span>
-                            <h3>小楼一夜听风雨</h3>
+                            <h3><a href="b1.html" style="color:inherit;text-decoration:none;">小楼一夜听风雨</a></h3>
                         </div>
                     </div>
 
@@ -1362,7 +1208,7 @@
                         <div class="detail-item">
                             <i class="fas fa-trophy"></i>
                             <h4>联赛等级</h4>
-                            <p>水晶 III</p>
+                            <p>金杯 II</p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-exchange-alt"></i>
@@ -1416,6 +1262,14 @@
                 <div class="clan-details" style="margin-top: 30px;">
                     <div class="detail-item">
                         <i class="fas fa-code-branch"></i>
+                        <h4>萌新聚集地 3级</h4>
+                        <p>养老营</p>
+                        <p>标签：#2GLYR0CGP</p>
+                        <p>联赛：未定级</p>
+                    </div>
+
+                    <div class="detail-item">
+                        <i class="fas fa-code-branch"></i>
                         <h4>霸王 20级</h4>
                         <p>备用分部</p>
                         <p>标签：#CGUUCYJQ</p>
@@ -1431,71 +1285,139 @@
                     </div>
 
                     <div class="detail-item">
-                        <i class="fas fa-code-branch"></i>
-                        <h4>萌新聚集地 5级</h4>
-                        <p>备用分部</p>
-                        <p>标签：#2GLYR0CGP</p>
-                        <p>联赛：黄金1</p>
-                    </div>
-
-                    <div class="detail-item">
                         <i class="fas fa-ghost"></i>
-                        <h4>追昔 12级</h4>
+                        <h4>追昔 11级</h4>
                         <p>联赛壳子</p>
                         <p>标签：#2RL2YLJ08</p>
-                        <p>联赛：黄金 I</p>
+                        <p>联赛：黄金 II</p>
                     </div>
 
                     <div class="detail-item">
                         <i class="fas fa-ghost"></i>
-                        <h4>CHAMP⚔️ DYNASTY 7级</h4>
+                        <h4>CHAMP⚔️ DYNASTY 6级</h4>
                         <p>联赛壳子</p>
                         <p>标签：#2G2J0R9JP</p>
-                        <p>联赛：水晶 III</p>
+                        <p>联赛：水晶 II</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="reports" class="bg-odd">
+        <section id="warlog"
+            style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
             <div class="container">
                 <div class="section-title">
                     <h2>近期战报</h2>
                 </div>
-                <p class="section-subtitle">近期部落战战绩一览</p>
 
-                <div class="war-reports">
-                    <div class="war-reports-container">
-                        <div class="war-report-item">
-                            <div class="war-number"><i class="fas fa-crosshairs"></i> 第713场部落战</div>
-                            <div class="war-result">
-                                <div class="war-score"> 107 <span style="color: var(--primary)">vs</span> 91</div>
-                                <div class="war-outcome win"><i class="fas fa-trophy"></i> 我方胜利</div>
-                            </div>
+                <div class="war-log">
+                    <div class="war-header">
+                        <div class="war-title">第 698 场部落战</div>
+                        <div class="win-label">胜利</div>
+                    </div>
+
+                    <div class="war-stats">
+                        <div class="stat">
+                            <div class="stat-value">105⭐</div>
+                            <div class="stat-label">我方战绩</div>
                         </div>
-                        
-                        <div class="war-report-item">
-                            <div class="war-number"><i class="fas fa-crosshairs"></i> 第712场部落战 </div>
-                            <div class="war-result">
-                                <div class="war-score">120 <span style="color: var(--primary)">vs</span> 106</div>
-                                <div class="war-outcome win"><i class="fas fa-trophy"></i> 我方胜利</div>
-                            </div>
+
+                        <div class="vs">VS</div>
+
+                        <div class="stat">
+                            <div class="stat-value">104⭐</div>
+                            <div class="stat-label">敌方战绩</div>
                         </div>
-                        
-                        <div class="war-report-item">
-                            <div class="war-number"><i class="fas fa-crosshairs"></i> 第711场部落战</div>
-                            <div class="war-result">
-                                <div class="war-score">120 <span style="color: var(--primary)">vs</span> 99</div>
-                                <div class="war-outcome win"><i class="fas fa-trophy"></i> 我方胜利</div>
-                            </div>
+                    </div>
+                </div>
+
+                <div class="war-log">
+                    <div class="war-header">
+                        <div class="war-title">第 697 场部落战</div>
+                        <div class="win-label">胜利</div>
+                    </div>
+
+                    <div class="war-stats">
+                        <div class="stat">
+                            <div class="stat-value">105⭐</div>
+                            <div class="stat-label">我方战绩</div>
                         </div>
-                        
+
+                        <div class="vs">VS</div>
+
+                        <div class="stat">
+                            <div class="stat-value">90⭐</div>
+                            <div class="stat-label">敌方战绩</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="rules" class="bg-even">
+        <section id="members">
+            <div class="container">
+                <div class="section-title">
+                    <h2>部落管理</h2>
+                </div>
+
+                <div class="members-grid">
+                    <div class="member-card leader">
+                        <div class="member-header">
+                            <div class="member-avatar" style="overflow: hidden;">
+                                <img src="suihuang.jpg" alt="头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                            </div>
+                            <h3 class="member-name">燧皇</h3>
+                            <div class="member-role">首领</div>
+                        </div>
+                        <div class="member-info">
+                            <p>创始人与领导者</p>
+                        </div>
+                    </div>
+
+                    <div class="member-card officer">
+                        <div class="member-header">
+                            <div class="member-avatar">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="member-name">太一</h3>
+                            <div class="member-role">副手</div>
+                        </div>
+                        <div class="member-info">
+                            <p>日常管理与部落战</p>
+                        </div>
+                    </div>
+
+                    <div class="member-card officer">
+                        <div class="member-header">
+                            <div class="member-avatar">
+                                <img src="公猪.jpg" alt="头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                            </div>
+                            <h3 class="member-name">白雪公猪</h3>
+                            <div class="member-role">副手</div>
+                        </div>
+                        <div class="member-info">
+                            <p>日常管理</p>
+                        </div>
+                    </div>
+
+                    <div class="member-card officer">
+                        <div class="member-header">
+                            <div class="member-avatar">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="member-name">牛牛</h3>
+                            <div class="member-role">副手</div>
+                        </div>
+                        <div class="member-info">
+                            <p>日常管理</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rules"
+            style="background: linear-gradient(135deg, rgba(125, 162, 125, 0.05), rgba(233, 180, 76, 0.03));">
             <div class="container">
                 <div class="section-title">
                     <h2>部落规则</h2>
@@ -1539,102 +1461,7 @@
             </div>
         </section>
 
-        <section id="recruit" class="bg-odd">
-            <div class="container">
-                <div class="section-title">
-                    <h2>精英殿·卓越之选</h2>
-                </div>
-                <p class="section-subtitle">与你携手，打破极限，成为我们部落的荣耀之师！</p>
-
-                <div class="clan-info">
-                    <div class="recruit-content">
-                        <p style="font-size: 1.2rem; margin-bottom: 20px; text-align: center;">
-                            <strong>诚邀大本营12级及以上、热爱交流，喜欢部落战的活跃玩家加入我们！</strong>
-                        </p>
-                        <div style="display: flex; justify-content: center; margin-top: 30px;">
-                            <a href="#join" class="btn btn-accent">立即申请</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="members" class="bg-even">
-            <div class="container">
-                <div class="section-title">
-                    <h2>部落管理</h2>
-                </div>
-
-                <div class="members-grid">
-                    <div class="member-card leader">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <img src="suihuang.jpg" alt="头像" />
-                            </div>
-                            <h3 class="member-name">燧皇</h3>
-                            <div class="member-role">望雪台</div>
-                        </div>
-                        <div class="member-info">
-                            <p>创始人与领导者</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card officer">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <img src="fish.jpg" alt="头像" />
-                            </div>
-                            <h3 class="member-name">太一</h3>
-                            <div class="member-role">破晓客</div>
-                        </div>
-                        <div class="member-info">
-                            <p>日常管理与部落战</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card officer">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <img src="公猪.jpg" alt="头像" />
-                            </div>
-                            <h3 class="member-name">白雪公猪</h3>
-                            <div class="member-role">冰镜</div>
-                        </div>
-                        <div class="member-info">
-                            <p>日常管理</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card officer">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <img src="cow.jpg" alt="头像" />
-                            </div>
-                            <h3 class="member-name">牛牛</h3>
-                            <div class="member-role">望舒</div>
-                        </div>
-                        <div class="member-info">
-                            <p>日常管理</p>
-                        </div>
-                    </div>
-                    
-                    <div class="member-card officer">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <img src="tigger.jpg" alt="头像" />
-                            </div>
-                            <h3 class="member-name">TiggerTeh</h3>
-                            <div class="member-role">云梦</div>
-                        </div>
-                        <div class="member-info">
-                            <p>日常管理</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="honor" class="bg-odd">
+        <section id="honor">
             <div class="container">
                 <div class="wall-section">
                     <div class="wall-title">
@@ -1643,24 +1470,6 @@
                     <p class="wall-subtitle">嘉奖表现卓越者</p>
                     
                     <div class="wall-grid">
-                        <div class="honor-card">
-                            <div class="wall-avatar">
-                                <i class="fas fa-medal" style="font-size: 3rem; color: gold; line-height: 80px;"></i>
-                            </div>
-                            <h3 class="wall-name">J.</h3>
-                            <p class="wall-reason">联赛表现卓越</p>
-                            <p>9月黄金令牌奖励</p>
-                        </div>
-
-                        <div class="honor-card">
-                            <div class="wall-avatar">
-                                <i class="fas fa-medal" style="font-size: 3rem; color: gold; line-height: 80px;"></i>
-                            </div>
-                            <h3 class="wall-name">fish5</h3>
-                            <p class="wall-reason">联赛表现卓越</p>
-                            <p>9月黄金令牌奖励</p>
-                        </div>
-
                         <div class="honor-card">
                             <div class="wall-avatar">
                                 <i class="fas fa-medal" style="font-size: 3rem; color: gold; line-height: 80px;"></i>
@@ -1683,7 +1492,7 @@
             </div>
         </section>
 
-        <section id="join" class="bg-even">
+        <section id="join">
             <div class="container">
                 <div class="join-container">
                     <h2 class="join-title">加入我们</h2>
@@ -1704,53 +1513,23 @@
                             <i class="fas fa-ghost"></i> 加入壳子
                         </a>
                     </div>
-                </div>
             </div>
         </section>
 
         <footer>
             <div class="container">
                 <div class="footer-content">
-                    <div class="footer-column">
-                        <h4>部落分部</h4>
-                        <ul class="footer-links">
-                            <li><a href="#"><i class="fas fa-home"></i> 小楼一夜听风雨</a></li>
-                            <li><a href="#"><i class="fas fa-code-branch"></i> 天地之间任我猖狂</a></li>
-                        </ul>
+                    <div class="footer-logo">
+                        <i class="fas fa-crown"></i>
                     </div>
-                    
-                    <div class="footer-column">
-                        <h4>快速链接</h4>
-                        <ul class="footer-links">
-                            <li><a href="#about"><i class="fas fa-users"></i> 关于我们</a></li>
-                            <li><a href="#info"><i class="fas fa-info-circle"></i> 部落简介</a></li>
-                            <li><a href="#reports"><i class="fas fa-scroll"></i> 近期战报</a></li>
-                            <li><a href="#rules"><i class="fas fa-list-alt"></i> 部落规则</a></li>
-                            <li><a href="#recruit"><i class="fas fa-bullhorn"></i> 招募信息</a></li>
-                            <li><a href="#members"><i class="fas fa-crown"></i> 管理团队</a></li>
-                        </ul>
+                    <h3>月汐幽屿</h3>
+                    <p>Clash of Clans 部落联盟</p>
+
+                    <div class="social-links">
+                        <a href="https://qm.qq.com/q/eg3TOOQMYo"><i class="fab fa-qq"></i></a>
                     </div>
-                    
-                    <div class="footer-column">
-                        <h4>其他</h4>
-                        <ul class="footer-links">
-                            <li><a href="b2.html"><i class="fas fa-book"></i> 攻略中心</a></li>
-                            <li><a href="privacy.html"><i class="fas fa-shield-alt"></i> 隐私条款</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4>联系我们</h4>
-                        <ul class="footer-links">
-                            <li><a href="#"><i class="fas fa-envelope"></i> web@oho1417.com</a></li>
-                            <li><a href="#"><i class="fab fa-qq"></i> QQ: 3226997497</a></li>
-                            <li><a href="#"><i class="fab fa-weixin"></i> 微信: hiddenohob</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="footer-bottom">
-                    <p class="copyright">本站内容若有不尽之处，本部落有绝对权随时増删，其它人士不得有异议<br>© 2025 Clash of Clans 月汐幽屿 | 部落联盟</p>
+
+                    <p class="copyright">本站内容若有不尽之处，本部落有绝对权随时増删，其它人士不得有异议<br>© 2025 Clash of Clans 月汐幽屿 | 部落联盟 | </p>
                 </div>
             </div>
         </footer>
